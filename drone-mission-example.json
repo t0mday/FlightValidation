@@ -1,0 +1,137 @@
+{
+    "actions": [
+      {
+        "command": "Takeoff",
+        "coordinate": [
+            50.49369620501886, 
+            -4.044813198974654
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Waypoint",
+        "coordinate": [
+            50.496579952790675, 
+            -4.043501715646021
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Waypoint",
+        "coordinate": [
+            50.50082363876783, 
+            -4.039909391745852
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Waypoint",
+        "coordinate": [
+            50.50370695146961, 
+            -4.025882222265102
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Waypoint",
+        "coordinate": [
+            50.502909071241994, 
+            -4.023800955243575
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Waypoint",
+        "coordinate": [
+            50.49881065581253, 
+            -4.0394532236657374
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Waypoint",
+        "coordinate": [
+            50.49726912434585, 
+            -4.036317067879875
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Waypoint",
+        "coordinate": [
+            50.49365993037904, 
+            -4.03634557838702
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      },
+      {
+        "command": "Landing",
+        "coordinate": [
+            50.49369620505702, 
+            -4.043159589594482
+        ],
+        "delay": 0,
+        "elevation": 50,
+        "heading": 0,
+        "radius": 0,
+        "speed": 5
+      }
+    ],
+    "defaultAngle": 0,
+    "defaultAngleOfView": [
+      150,
+      85
+    ],
+    "defaultCameraName": "",
+    "defaultCameraResolution": [
+      1280,
+      720
+    ],
+    "defaultAltitude": 0,
+    "defaultDelay": 0,
+    "defaultDistance": 0,
+    "defaultHeading": 0,
+    "defaultOverlap": 0,
+    "defaultRadius": 0,
+    "defaultSpeed": 0,
+    "defaultWidth": 0,
+    "home": {
+      "coordinate": [
+        50.49369620501886, 
+        -4.044813198974654
+      ]
+    },
+    "name": "Example flight"
+  }
