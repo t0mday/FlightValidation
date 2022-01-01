@@ -1,74 +1,84 @@
-// Creates a canvas and saves drawn shapes to a .png file.
+/* This script creates a canvas object, containing a basemap image, flight boundary and waypoints. 
+These are then saved to a .png file.
+*/
+
 const fs = require('fs');
-const rise = require('./rise_exports.js');
+const { getMissionWaypoints, getFlightBoundary } = require('./readFlightData');
 const {createCanvas, loadImage} = require('canvas');
+
+// set canvas size and drawing context
 const width = 1000;
 const height = 1000;
 const canvas = createCanvas(width, height);
 const ctx = canvas.getContext('2d');
-// Rotate canvas to get the origin in bottom left corner
-ctx.translate(width / 2, height / 2);
-ctx.rotate(-90 * Math.PI / 180);
-ctx.translate(-width / 2, -height / 2);
-ctx.fillStyle = 'white';
-ctx.fillRect(0, 0, width, height);
-// Import the mission and boundary shapes
-const waypoints = rise.readMissionFile('drone-example-mission.json');
-const boundary = rise.readFlightAreaFile('flight-boundary.json');
+
+// Import the mission and boundary shapes, converting lat, long into x, y (reversed order)
+const waypoints = getMissionWaypoints('drone-mission-example.json', false);
+const boundary = getFlightBoundary('flight-boundary-example.json', false);
+
 // Transform mission and boundary shapes to canvas extent
 const minMaxCoords = findMinMax([boundary, waypoints]);
-const scaledWaypoints = transformCoords(waypoints, minMaxCoords, width, height);
-const scaledBoundary = transformCoords(boundary, minMaxCoords, width, height);
-draw(scaledWaypoints, 'blue');
-draw(scaledBoundary, 'orange');
-savePng('flight.png');
+const scaledWaypoints = transformCoords(waypoints, width, height, minMaxCoords);
+const scaledBoundary = transformCoords(boundary, width, height, minMaxCoords);
 
+// Import background image and draw the mission and boundary polygons on top
+loadImage('./basemap.png').then(image => {
+    // draw background image to fill canvas
+    ctx.drawImage(image, 0, 0, 1000, 1000);
+    // draw waypoints and boundary
+    draw(scaledWaypoints, 'blue');
+    draw(scaledBoundary, 'orange');
+    // save to file
+    savePng('flight.png');
+});
+
+// Takes an array of shapes and returns the min and max coordinates that all the shapes fit within.
 function findMinMax(arrayOfShapes) {
-  // Takes an array of shapes and returns the min and max coordinates that all the shapes fit within.
-  let xMin = 180, xMax = -180, yMin = 180, yMax = -180;
-  for(let shape of arrayOfShapes) {
-    for(let point of shape) {
-      if(point.x < xMin) xMin = point.x;
-      if(point.y < yMin) yMin = point.y;
-      if(point.x > xMax) xMax = point.x;
-      if(point.y > yMax) yMax = point.y;
+    let xMin = 180, xMax = -180, yMin = 180, yMax = -180;
+    for(let shape of arrayOfShapes) {
+        for(let point of shape) {
+            if(point.x < xMin) xMin = point.x;
+            if(point.y < yMin) yMin = point.y;
+            if(point.x > xMax) xMax = point.x;
+            if(point.y > yMax) yMax = point.y;
+        }
     }
-  }
-  return {
-    'xMin': xMin,
-    'yMin': yMin,
-    'xMax': xMax,
-    'yMax': yMax
-  }
+    return {
+        'xMin': xMin,
+        'yMin': yMin,
+        'xMax': xMax,
+        'yMax': yMax
+    }
 }
 
-function transformCoords(coords, minMax, height, width) {
-  // Scales lat, long coordinates into graphical x, y coordinates to fit inside a canvas of specified height and width. minMax is an object of min/max coordinates that need to be able to be plotted on the canvas.
-  return coords.map(coord => ({
-    'x': parseInt(
-      ((coord.x - minMax.xMin) * width) / (minMax.xMax - minMax.xMin)
-      ),
-    'y': parseInt(
-      ((coord.y - minMax.yMin) * height) / (minMax.yMax - minMax.yMin)
-      )
-  })); 
+/* Scales coordinates to fit inside a canvas of specified height and width.
+xMin, yMin, xMax and yMax are the smallest and largest coordinates that all plottable shapes fit within */
+function transformCoords(coords, width, height, {xMin, yMin, xMax, yMax}) {
+    return coords.map(coord => ({
+        // scale x coords
+        'x': parseInt(
+            ((coord.x - xMin) * width) / (xMax - xMin)
+            ),
+        // scale y coords - this also inverts the y-axis to allow for canvas origin at top left
+        'y': parseInt(
+            ((yMax - coord.y) * height) / (yMax - yMin) 
+            )
+    })); 
 }
 
+// Draws shape to canvas in chosen colour.
 function draw(shape, colour) {
-  // Draws shape to canvas in chosen colour.
-  ctx.strokeStyle = colour;
-  ctx.beginPath();
-  ctx.moveTo(shape[0].x, shape[0].y);
-  for(let i=1; i<shape.length; i++) {
-    ctx.lineTo(shape[i].x, shape[i].y);
-  }
-  ctx.stroke();
+    ctx.strokeStyle = colour;
+    ctx.beginPath();
+    ctx.moveTo(shape[0].x, shape[0].y);
+    for(let i=1; i<shape.length; i++) {
+        ctx.lineTo(shape[i].x, shape[i].y);
+    }
+    ctx.stroke();
 }
 
+// Creates png image file from canvas
 function savePng(filename) {
-  //saves canvas as a png file.
-  const buf = canvas.toBuffer();
-  fs.writeFileSync(filename, buf);
+    const buffer = canvas.toBuffer();
+    fs.writeFileSync(filename, buffer);
 }
-
-
