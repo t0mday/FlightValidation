@@ -53,7 +53,7 @@ loadImage('./basemap.png').then(image => {
     draw(scaledBoundary, 'orange', 5);
     
     // acknowledge map data in background image
-    writeAcknowledgements('Map Imagery and Data \u00A9 2022 Maxar Technologies');
+    writeAcknowledgements('Map Imagery and Data \u00A9 Maxar Technologies');
 
     // save to file
     savePng('flight.png');
