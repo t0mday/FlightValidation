@@ -49,8 +49,8 @@ loadImage('./basemap.png').then(image => {
     // draw background image to fill canvas
     ctx.drawImage(image, 0, 0, width, height);
     // draw waypoints and boundary
-    draw(scaledWaypoints, 'purple', 7);
-    draw(scaledBoundary, 'orange', 5);
+    draw(scaledWaypoints, 'purple', 3);
+    draw(scaledBoundary, 'orange', 2);
     
     // acknowledge map data in background image
     writeAcknowledgements('Map Imagery and Data \u00A9 Maxar Technologies');
@@ -70,6 +70,9 @@ function findMinMax(arrayOfShapes) {
             if(point.y > yMax) yMax = point.y;
         }
     }
+    console.log(`Boundary lat long coordinates...\n
+        Top left: [${yMax}, ${xMin}], Top right: [${yMax}, ${xMax}]\n
+        Bottom left: [${yMin}, ${xMin}], Bottom right: [${yMin}, ${xMax}]`);
     return {
         'xMin': xMin,
         'yMin': yMin,
@@ -109,7 +112,7 @@ function draw(shape, colour, lineWidth) {
 function writeAcknowledgements(text) {
     ctx.font = 'bold 16pt Helvetica';
     ctx.fillStyle = '#fff';
-    ctx.fillText(text, 50, height - 30);
+    ctx.fillText(text, 20, height - 20);
 }
 
 // Creates png image file from canvas
