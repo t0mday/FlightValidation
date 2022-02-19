@@ -110,9 +110,9 @@ function draw(shape, colour, lineWidth) {
 
 // Writes map data acknowledgments
 function writeAcknowledgements(text) {
-    ctx.font = 'bold 16pt Helvetica';
+    ctx.font = 'bold 12pt Helvetica';
     ctx.fillStyle = '#fff';
-    ctx.fillText(text, 20, height - 20);
+    ctx.fillText(text, 20, height - 60);
 }
 
 // Creates png image file from canvas
